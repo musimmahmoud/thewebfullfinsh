@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* These variables now define the permanent dark theme */
+    --background: 0 0% 3.9%; /* Near black */
+    --foreground: 0 0% 98%; /* White */
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%; /* White */
+    --primary-foreground: 0 0% 9%; /* Black */
+    --secondary: 0 0% 14.9%; /* Dark gray */
+    --secondary-foreground: 0 0% 98%; /* White */
+    --muted: 0 0% 14.9%; /* Dark gray */
+    --muted-foreground: 0 0% 63.9%; /* Medium gray */
+    --accent: 0 0% 90%; /* Light gray for accent */
+    --accent-foreground: 0 0% 9%; /* Black for text on accent */
+    --destructive: 0 62.8% 30.6%; /* Red (kept for destructive actions) */
+    --destructive-foreground: 0 0% 98%; /* White */
+    --border: 0 0% 14.9%; /* Dark gray */
+    --input: 0 0% 14.9%; /* Dark gray */
+    --ring: 0 0% 60%; /* Medium gray for rings */
+    --radius: 0.5rem;
+    /* Chart colors can remain as they are not directly used for UI elements */
+    --chart-1: 217 92% 40%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 320 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
