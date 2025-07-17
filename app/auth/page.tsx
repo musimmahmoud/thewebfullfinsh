@@ -112,7 +112,7 @@ export default function AuthPage() {
                   <Label htmlFor="password" className="text-gray-300 text-sm font-medium">
                     Password
                   </Label>
-                  {!isLogin && ( // Only show forgot password for login
+                  {isLogin && ( // Only show forgot password for login
                     <Link
                       href="#"
                       className="text-white hover:text-gray-300 transition-colors duration-200 font-medium"
