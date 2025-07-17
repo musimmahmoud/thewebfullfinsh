@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Activity, Workflow, Users, Plus, ChevronDown } from "lucide-react"
-import { createClient } from "@/utils/supabase/server" // Import server-side client
+import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
-import { signOut } from "@/app/auth/actions" // Import signOut action
+import { signOut } from "@/app/auth/actions"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,14 +13,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export default async function DashboardPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return redirect("/auth") // Redirect to login if no user session
+    redirect("/auth")
   }
 
   return (
@@ -47,7 +47,7 @@ export default async function DashboardPage() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-gray-950 border-gray-800 text-white">
-                <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">Account</DropdownMenuItem>
+                <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">Account Settings</DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-800" />
                 <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
                   <form action={signOut} className="w-full">
@@ -68,7 +68,8 @@ export default async function DashboardPage() {
 
       {/* Main Dashboard Content */}
       <main className="max-w-7xl mx-auto py-12 px-8">
-        <h1 className="text-4xl font-bold text-white mb-8">Welcome, Automator!</h1> {/* Display user email */}
+        <h1 className="text-4xl font-bold text-white mb-8">Welcome back!</h1>
+
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <Card className="bg-gradient-to-br from-gray-800/50 to-black/50 border border-gray-700/50 backdrop-blur-sm">
@@ -102,6 +103,7 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
         </div>
+
         {/* Recent Workflows Section */}
         <h2 className="text-3xl font-bold text-white mb-6">Recent Workflows</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
