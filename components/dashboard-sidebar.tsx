@@ -52,7 +52,7 @@ export function DashboardSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar collapsible="icon" variant="sidebar">
+    <Sidebar collapsible="icon" variant="sidebar" className="bg-sidebar-background">
       <SidebarHeader>
         <div className="flex items-center space-x-2 p-2">
           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
@@ -74,14 +74,18 @@ export function DashboardSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-gray-400 group-data-[state=collapsed]:hidden">
+          <SidebarGroupLabel className="text-gray-500 group-data-[state=collapsed]:hidden">
             Main Navigation
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === item.href}
+                    className="data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  >
                     <Link href={item.href}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -100,7 +104,7 @@ export function DashboardSidebar() {
             <SidebarGroupLabel asChild>
               <CollapsibleTrigger className="w-full flex items-center justify-between">
                 <span className="text-gray-400 group-data-[state=collapsed]:hidden">Help & Support</span>
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180 group-data-[state=collapsed]:hidden" />
+                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180 group-data-[state=collapsed]:hidden text-white" />
               </CollapsibleTrigger>
             </SidebarGroupLabel>
             <CollapsibleContent>
@@ -129,9 +133,9 @@ export function DashboardSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="w-full">
-                  <User2 />
+                  <User2 className="text-white" />
                   <span className="group-data-[state=collapsed]:hidden">Username</span>
-                  <ChevronDown className="ml-auto group-data-[state=collapsed]:hidden" />
+                  <ChevronDown className="ml-auto group-data-[state=collapsed]:hidden text-white" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
