@@ -1,9 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Activity, Workflow, Users, Plus } from "lucide-react"
+import { Activity, Workflow, Users, Plus, ChevronDown } from "lucide-react"
 import { createClient } from "@/utils/supabase/server" // Import server-side client
 import { redirect } from "next/navigation"
 import { signOut } from "@/app/auth/actions" // Import signOut action
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default async function DashboardPage() {
   const supabase = createClient()
@@ -25,21 +32,32 @@ export default async function DashboardPage() {
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
               <span className="text-black font-bold text-sm">WA</span>
             </div>
-            <span className="text-white font-semibold text-lg">Workflows AI Dashboard</span>
+            <span className="text-white font-semibold text-lg">Workflows AI</span>
           </div>
           <div className="flex items-center space-x-4">
-            <form action={signOut}>
-              {" "}
-              {/* Logout form */}
-              <Button
-                type="submit"
-                size="sm"
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 bg-transparent text-sm px-4"
-              >
-                Sign Out
-              </Button>
-            </form>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-white/20 text-white hover:bg-white/10 bg-transparent text-sm px-4 flex items-center gap-2"
+                >
+                  {user.email}
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-gray-950 border-gray-800 text-white">
+                <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">Account</DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-gray-800" />
+                <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
+                  <form action={signOut} className="w-full">
+                    <button type="submit" className="w-full text-left">
+                      Sign Out
+                    </button>
+                  </form>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button size="sm" className="bg-white text-black hover:bg-gray-200 text-sm px-4">
               <Plus className="w-4 h-4 mr-2" />
               New Workflow
@@ -50,7 +68,7 @@ export default async function DashboardPage() {
 
       {/* Main Dashboard Content */}
       <main className="max-w-7xl mx-auto py-12 px-8">
-        <h1 className="text-4xl font-bold text-white mb-8">Welcome, {user.email}!</h1> {/* Display user email */}
+        <h1 className="text-4xl font-bold text-white mb-8">Welcome, Automator!</h1> {/* Display user email */}
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <Card className="bg-gradient-to-br from-gray-800/50 to-black/50 border border-gray-700/50 backdrop-blur-sm">
