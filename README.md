@@ -14,13 +14,13 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 Your project is live at:
 
-**[https://vercel.com/musimmahmouds-projects/v0-next-js-landing-page](https://vercel.com/musimmahmouds-projects/v0-next-js-landing-page)**
+**[https://ai-saas-landing.vercel.app](https://ai-saas-landing.vercel.app)**
 
 ## Build your app
 
 Continue building your app on:
 
-**[https://v0.dev/chat/projects/OsbrJTB8a9c](https://v0.dev/chat/projects/OsbrJTB8a9c)**
+**[https://ai-saas-landing.vercel.app](https://ai-saas-landing.vercel.app)**
 
 ## How It Works
 
