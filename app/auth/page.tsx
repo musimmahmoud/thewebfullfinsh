@@ -9,13 +9,15 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { motion } from "framer-motion"
-import { Github } from "lucide-react"
+import { Github, Mail } from "lucide-react" // Added Mail icon
 import { signIn, signUp, resetPasswordForEmail, signInWithOAuth } from "./actions" // Import all server actions
 
 export default function AuthPage() {
   const searchParams = useSearchParams()
   const [isLogin, setIsLogin] = useState(true)
   const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [showEmailVerificationMessage, setShowEmailVerificationMessage] = useState(false)
+  const [emailForVerification, setEmailForVerification] = useState("")
   const [message, setMessage] = useState<string | null>(null)
 
   useEffect(() => {
@@ -35,12 +37,70 @@ export default function AuthPage() {
     } else if (isLogin) {
       await signIn(formData)
     } else {
-      await signUp(formData)
+      const result = await signUp(formData)
+      if (result.success) {
+        setShowEmailVerificationMessage(true)
+        setEmailForVerification(result.email)
+        setMessage(result.message)
+      } else {
+        setMessage(result.message)
+      }
     }
   }
 
   const handleOAuthSignIn = async (provider: "github") => {
     await signInWithOAuth(provider)
+  }
+
+  const openGmail = () => {
+    window.open("https://mail.google.com", "_blank")
+  }
+
+  if (showEmailVerificationMessage) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center p-4 relative overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+              linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+          }}
+        />
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 w-full max-w-lg"
+        >
+          <Card className="bg-gray-950 border border-gray-800 shadow-2xl p-8 md:p-10 rounded-2xl text-center">
+            <CardHeader className="mb-8 space-y-4">
+              <CardTitle className="text-3xl font-bold text-white tracking-tight">Verify Your Email</CardTitle>
+              <CardDescription className="text-gray-400 text-base">
+                A verification link has been sent to <span className="font-semibold">{emailForVerification}</span>.
+                Please check your inbox and click the link to activate your account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Button
+                onClick={openGmail}
+                className="w-full bg-white text-black hover:bg-gray-200 text-base py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-3"
+              >
+                <Mail className="w-5 h-5" />
+                <span>Open Gmail</span>
+              </Button>
+              <p className="text-sm text-gray-500">
+                If you use a different email client, please open it manually to find the verification email.
+              </p>
+              {message && <div className="text-center text-sm text-gray-400 pt-4">{message}</div>}
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    )
   }
 
   return (

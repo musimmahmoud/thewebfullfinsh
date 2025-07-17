@@ -28,7 +28,7 @@ export async function signUp(formData: FormData) {
   const password = formData.get("password") as string
   const supabase = createClient()
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -38,10 +38,11 @@ export async function signUp(formData: FormData) {
 
   if (error) {
     console.error("Sign-up error:", error.message)
-    return redirect(`/auth?message=${encodeURIComponent("Could not create user. " + error.message)}`)
+    return { success: false, message: "Could not create user. " + error.message, email: "" }
   }
 
-  return redirect(`/auth?message=${encodeURIComponent("Check your email to verify your account.")}`)
+  // Return success and the email used for the client to display
+  return { success: true, message: "Check your email to verify your account.", email }
 }
 
 export async function signOut() {
