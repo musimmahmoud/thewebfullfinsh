@@ -81,3 +81,10 @@ export async function updatePassword(formData: FormData) {
   revalidatePath("/", "layout")
   redirect("/dashboard?message=Password updated successfully")
 }
+
+// ──────────────────────────────────────────────────────────────
+// TEMPORARY alias for legacy imports (update-password page) ----
+export async function updateUserPassword(formData: FormData) {
+  // Re-use the current implementation
+  return updatePassword(formData)
+}
