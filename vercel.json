@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "app/auth/callback/route.ts": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/auth/:path*",
+      "destination": "/auth/:path*"
+    }
+  ]
+}

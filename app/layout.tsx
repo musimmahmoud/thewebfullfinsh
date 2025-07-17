@@ -18,7 +18,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      {/* Forced dark mode */}
       <body className={inter.className}>{children}</body>
     </html>
   )
