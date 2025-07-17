@@ -1,8 +1,21 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Activity, Workflow, Users, Plus } from "lucide-react"
+import { createClient } from "@/utils/supabase/server" // Import server-side client
+import { redirect } from "next/navigation"
+import { signOut } from "@/app/auth/actions" // Import signOut action
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return redirect("/auth") // Redirect to login if no user session
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Dashboard Header */}
@@ -15,6 +28,18 @@ export default function DashboardPage() {
             <span className="text-white font-semibold text-lg">Workflows AI Dashboard</span>
           </div>
           <div className="flex items-center space-x-4">
+            <form action={signOut}>
+              {" "}
+              {/* Logout form */}
+              <Button
+                type="submit"
+                size="sm"
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10 bg-transparent text-sm px-4"
+              >
+                Sign Out
+              </Button>
+            </form>
             <Button size="sm" className="bg-white text-black hover:bg-gray-200 text-sm px-4">
               <Plus className="w-4 h-4 mr-2" />
               New Workflow
@@ -25,8 +50,7 @@ export default function DashboardPage() {
 
       {/* Main Dashboard Content */}
       <main className="max-w-7xl mx-auto py-12 px-8">
-        <h1 className="text-4xl font-bold text-white mb-8">Welcome, Automator!</h1>
-
+        <h1 className="text-4xl font-bold text-white mb-8">Welcome, {user.email}!</h1> {/* Display user email */}
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <Card className="bg-gradient-to-br from-gray-800/50 to-black/50 border border-gray-700/50 backdrop-blur-sm">
@@ -60,7 +84,6 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-
         {/* Recent Workflows Section */}
         <h2 className="text-3xl font-bold text-white mb-6">Recent Workflows</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
