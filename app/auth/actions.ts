@@ -16,7 +16,7 @@ export async function signIn(formData: FormData) {
 
   if (error) {
     console.error("Sign-in error:", error.message)
-    return redirect("/auth?message=Could not authenticate user")
+    return redirect(`/auth?message=${encodeURIComponent("Could not authenticate user. Check your credentials.")}`)
   }
 
   return redirect("/dashboard")
@@ -38,10 +38,10 @@ export async function signUp(formData: FormData) {
 
   if (error) {
     console.error("Sign-up error:", error.message)
-    return redirect("/auth?message=Could not create user with provided credentials")
+    return redirect(`/auth?message=${encodeURIComponent("Could not create user. " + error.message)}`)
   }
 
-  return redirect("/auth?message=Check email to verify account")
+  return redirect(`/auth?message=${encodeURIComponent("Check your email to verify your account.")}`)
 }
 
 export async function signOut() {
@@ -53,4 +53,55 @@ export async function signOut() {
   }
 
   return redirect("/auth")
+}
+
+export async function resetPasswordForEmail(formData: FormData) {
+  const email = formData.get("email") as string
+  const origin = headers().get("origin")
+  const supabase = createClient()
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/auth/update-password`,
+  })
+
+  if (error) {
+    console.error("Password reset request error:", error.message)
+    return redirect(`/auth?message=${encodeURIComponent("Error requesting password reset. " + error.message)}`)
+  }
+
+  return redirect(`/auth?message=${encodeURIComponent("Password reset email sent. Check your inbox.")}`)
+}
+
+export async function updateUserPassword(formData: FormData) {
+  const password = formData.get("password") as string
+  const supabase = createClient()
+
+  const { error } = await supabase.auth.updateUser({ password })
+
+  if (error) {
+    console.error("Update password error:", error.message)
+    return redirect(`/auth/update-password?message=${encodeURIComponent("Error updating password. " + error.message)}`)
+  }
+
+  return redirect(`/dashboard?message=${encodeURIComponent("Your password has been updated successfully!")}`)
+}
+
+export async function signInWithOAuth(provider: "github") {
+  const origin = headers().get("origin")
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    console.error("OAuth sign-in error:", error.message)
+    return redirect(`/auth?message=${encodeURIComponent("Error with OAuth sign-in. " + error.message)}`)
+  }
+
+  // Supabase will redirect to data.url, which then redirects to redirectTo
+  return redirect(data.url)
 }
